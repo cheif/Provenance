@@ -7,11 +7,15 @@
 //
 
 import XCTest
+import RxSwift
+import RxTest
 @testable import PVLibrary
 
 class DirectoryWatcherTests: XCTestCase {
     static let folderPath = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(UUID().uuidString)
-    var sut: DirectoryWatcher!
+    var bag: DisposeBag!
+    var scheduler: TestScheduler!
+    var sut: RxDirectoryWatcher!
     private let releaseIdChecker = ReleaseIdCheckerMock()
     let folderPath = DirectoryWatcherTests.folderPath
     let testZip = try! Data(contentsOf: Bundle(for: DirectoryWatcherTests.self).url(forResource: "test", withExtension: "zip")!)
@@ -20,71 +24,112 @@ class DirectoryWatcherTests: XCTestCase {
     override func setUp() {
         super.setUp()
         try! FileManager.default.createDirectory(at: folderPath, withIntermediateDirectories: true, attributes: nil)
+        bag = .init()
+        scheduler = .init(initialClock: 0)
+        sut = .init(directory: folderPath, extractor: .init(releaseIdChecker: releaseIdChecker), scheduler: scheduler)
     }
 
     override func tearDown() {
         super.tearDown()
-        sut.stopMonitoring()
+        bag = nil
+        scheduler = nil
+        sut = nil
         try! FileManager.default.removeItem(at: folderPath)
     }
 
     func testZipAlreadyAdded() {
-        let exp = expectation(description: "Test")
-        sut = .init(directory: folderPath, extractionStartedHandler: nil, extractionUpdatedHandler: nil, extractionCompleteHandler: { urls in
-            XCTAssertEqual(urls?.count, 2)
-            exp.fulfill()
-        }, releaseIdChecker: releaseIdChecker)
+        let archivePath = folderPath.appendingPathComponent("archive.zip")
+        try! testZip.write(to: archivePath)
 
-        try! testZip.write(to: folderPath.appendingPathComponent("archive.zip"))
-        sut.startMonitoring()
+        let events = scheduler.start { self.sut.events }
 
-        wait(for: [exp], timeout: 4.0)
+        XCTAssertEqual(events.events, [
+            .next(204, .extractionStarted(path: archivePath)),
+            .next(204, .extractionUpdated(path: archivePath, progress: 0)),
+            .next(204, .extractionUpdated(path: archivePath, progress: 0.5)),
+            .next(204, .extractionComplete(path: archivePath))
+        ])
+
         let files = try! FileManager.default.contentsOfDirectory(at: folderPath, includingPropertiesForKeys: nil, options: []).map { $0.lastPathComponent }
         XCTAssertEqual(files, ["azure-pipelines.yml", "appcenter-post-clone.sh"])
     }
 
     func testAddingZip() {
-        let exp = expectation(description: "Test")
-        sut = .init(directory: folderPath, extractionStartedHandler: nil, extractionUpdatedHandler: nil, extractionCompleteHandler: { urls in
-            XCTAssertEqual(urls?.count, 2)
-            exp.fulfill()
-        }, releaseIdChecker: releaseIdChecker)
+        let archivePath = folderPath.appendingPathComponent("archive.zip")
 
-        sut.startMonitoring()
-        try! testZip.write(to: folderPath.appendingPathComponent("archive.zip"))
+        scheduler
+            .createColdObservable([
+                .next(203, (archivePath, testZip))
+            ])
+            .do(onNext: { url, data in
+                try! data.write(to: url)
+            })
+            .subscribe()
+            .disposed(by: bag)
 
-        wait(for: [exp], timeout: 4.0)
+        let events = scheduler.start { self.sut.events }
+
+        XCTAssertEqual(events.events, [
+            .next(206, .extractionStarted(path: archivePath)),
+            .next(206, .extractionUpdated(path: archivePath, progress: 0)),
+            .next(206, .extractionUpdated(path: archivePath, progress: 0.5)),
+            .next(206, .extractionComplete(path: archivePath))
+        ])
+
         let files = try! FileManager.default.contentsOfDirectory(at: folderPath, includingPropertiesForKeys: nil, options: []).map { $0.lastPathComponent }
         XCTAssertEqual(files, ["azure-pipelines.yml", "appcenter-post-clone.sh"])
     }
 
     func testAdding7Zip() {
-        let exp = expectation(description: "Test")
-        sut = .init(directory: folderPath, extractionStartedHandler: nil, extractionUpdatedHandler: nil, extractionCompleteHandler: { urls in
-        XCTAssertEqual(urls?.count, 1)
-            exp.fulfill()
-        }, releaseIdChecker: releaseIdChecker)
+        let archivePath = folderPath.appendingPathComponent("archive.7z")
 
-        sut.startMonitoring()
-        try! test7Zip.write(to: folderPath.appendingPathComponent("archive.7z"))
+        scheduler
+            .createColdObservable([
+                .next(203, (archivePath, test7Zip))
+            ])
+            .do(onNext: { url, data in
+                try! data.write(to: url)
+            })
+            .subscribe()
+            .disposed(by: bag)
 
-        wait(for: [exp], timeout: 4.0)
+        let events = scheduler.start { self.sut.events }
+
+        XCTAssertEqual(events.events, [
+            .next(206, .extractionStarted(path: archivePath)),
+            .next(206, .extractionUpdated(path: archivePath, progress: 0)),
+            .next(206, .extractionComplete(path: archivePath))
+        ])
+
         let files = try! FileManager.default.contentsOfDirectory(at: folderPath, includingPropertiesForKeys: nil, options: []).map { $0.lastPathComponent }
         XCTAssertEqual(files, ["Provenance-Bridging-Header.h"])
     }
 
     func testAddingBrokenFile() {
-        let exp = expectation(description: "Test")
-        sut = .init(directory: folderPath, extractionStartedHandler: nil, extractionUpdatedHandler: nil, extractionCompleteHandler: { urls in
-        XCTAssertEqual(urls?.count, 1)
-            exp.fulfill()
-        }, releaseIdChecker: releaseIdChecker)
+        let zipPath = folderPath.appendingPathComponent("archive.zip")
+        let archivePath = folderPath.appendingPathComponent("archive.7z")
 
-        sut.startMonitoring()
-        try! Data(base64Encoded: "")!.write(to: folderPath.appendingPathComponent("archive.zip"))
-        try! test7Zip.write(to: folderPath.appendingPathComponent("archive.7z"))
+        scheduler
+            .createColdObservable([
+                .next(203, (zipPath, test7Zip)),
+                .next(250, (archivePath, test7Zip))
+            ])
+            .do(onNext: { url, data in
+                try! data.write(to: url)
+            })
+            .subscribe()
+            .disposed(by: bag)
 
-        wait(for: [exp], timeout: 4.0)
+        let events = scheduler.start { self.sut.events }
+
+        XCTAssertEqual(events.events, [
+            .next(206, .extractionStarted(path: zipPath)),
+            .next(206, .extractionFailed(path: zipPath)),
+            .next(254, .extractionStarted(path: archivePath)),
+            .next(254, .extractionUpdated(path: archivePath, progress: 0)),
+            .next(254, .extractionComplete(path: archivePath))
+        ])
+
         let files = try! FileManager.default.contentsOfDirectory(at: folderPath, includingPropertiesForKeys: nil, options: []).map { $0.lastPathComponent }
         XCTAssertEqual(files, ["Provenance-Bridging-Header.h", "archive.zip"])
     }

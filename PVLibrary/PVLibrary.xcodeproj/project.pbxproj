@@ -25,6 +25,12 @@
 		115E2F1D2476AA6B00B3404E /* RxCocoa.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B3AF6FC521916105000FA7F9 /* RxCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		115E2F222476AB1000B3404E /* RxRealm.framework in Copy Framework */ = {isa = PBXBuildFile; fileRef = 115E2F212476AB1000B3404E /* RxRealm.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		115E2F242476B62000B3404E /* RxRelay.framework in Copy Framework */ = {isa = PBXBuildFile; fileRef = 115E2F232476B62000B3404E /* RxRelay.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		11ADB3242471AE22001C7B27 /* RxDirectoryWatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ADB3232471AE22001C7B27 /* RxDirectoryWatcher.swift */; };
+		11ADB3252471AE22001C7B27 /* RxDirectoryWatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ADB3232471AE22001C7B27 /* RxDirectoryWatcher.swift */; };
+		11ADB3272471AE3C001C7B27 /* LegacyExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ADB3262471AE3C001C7B27 /* LegacyExtractor.swift */; };
+		11ADB3282471AE3C001C7B27 /* LegacyExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ADB3262471AE3C001C7B27 /* LegacyExtractor.swift */; };
+		11D2762124770940003D2245 /* RxTest.framework in Copy Framework */ = {isa = PBXBuildFile; fileRef = B3AF6FFD21916978000FA7F9 /* RxTest.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		11D2762224770953003D2245 /* RxTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3AF6FFD21916978000FA7F9 /* RxTest.framework */; };
 		B3067F4B2106B5A30091437F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3067F4A2106B5A20091437F /* Foundation.framework */; };
 		B3067F5D2106B8590091437F /* OESQLiteDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = B3579D1E2106B4D600DDEBD6 /* OESQLiteDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B3067F5E2106B8590091437F /* OESQLiteDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = B3579D202106B4D600DDEBD6 /* OESQLiteDatabase.m */; settings = {COMPILER_FLAGS = "-Wno-everything"; }; };
@@ -114,7 +120,6 @@
 		B378228621D41E9B0077E86F /* LibrarySerializerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B378228421D41E9B0077E86F /* LibrarySerializerError.swift */; };
 		B383F3BC219BB29600DB6926 /* iCloudSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = B383F3BB219BB29600DB6926 /* iCloudSync.swift */; };
 		B383F3BD219BB29600DB6926 /* iCloudSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = B383F3BB219BB29600DB6926 /* iCloudSync.swift */; };
-		B3AF42F42107145C002211EE /* DirectoryWatcher2.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D332106B4D700DDEBD6 /* DirectoryWatcher2.swift */; };
 		B3AF475721071CDB002211EE /* LzmaSDKObjCBufferProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = B3AF474321071CA6002211EE /* LzmaSDKObjCBufferProcessor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B3AF475821071CDB002211EE /* LzmaSDKObjCExtern.h in Headers */ = {isa = PBXBuildFile; fileRef = B3AF473D21071CA6002211EE /* LzmaSDKObjCExtern.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B3AF475921071CDB002211EE /* LzmaSDKObjCItem.h in Headers */ = {isa = PBXBuildFile; fileRef = B3AF473E21071CA6002211EE /* LzmaSDKObjCItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -273,7 +278,6 @@
 		B3C04AA721077B3100E7AF79 /* UIImage+Scaling.m in Sources */ = {isa = PBXBuildFile; fileRef = B3274E662106BAF500857F52 /* UIImage+Scaling.m */; };
 		B3C04AA821077B3100E7AF79 /* OutBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3AF46AF21071CA6002211EE /* OutBuffer.cpp */; };
 		B3C04AA921077B3100E7AF79 /* LzmaSDKObjCFileDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3AF474021071CA6002211EE /* LzmaSDKObjCFileDecoder.cpp */; settings = {COMPILER_FLAGS = "-Wno-everything"; }; };
-		B3C04AAA21077B3100E7AF79 /* DirectoryWatcher2.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D332106B4D700DDEBD6 /* DirectoryWatcher2.swift */; };
 		B3C04AAB21077B3100E7AF79 /* Lzma2Register.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3AF465E21071CA5002211EE /* Lzma2Register.cpp */; settings = {COMPILER_FLAGS = "-Wno-everything"; }; };
 		B3C04AAC21077B3100E7AF79 /* NSData+Hashing.m in Sources */ = {isa = PBXBuildFile; fileRef = B3579D372106B4D700DDEBD6 /* NSData+Hashing.m */; };
 		B3C04AAD21077B3100E7AF79 /* CopyCoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3AF466021071CA5002211EE /* CopyCoder.cpp */; };
@@ -471,6 +475,7 @@
 				115E2F222476AB1000B3404E /* RxRealm.framework in Copy Framework */,
 				115E2F112476A82A00B3404E /* RxCocoa.framework in Copy Framework */,
 				115E2F242476B62000B3404E /* RxRelay.framework in Copy Framework */,
+				11D2762124770940003D2245 /* RxTest.framework in Copy Framework */,
 			);
 			name = "Copy Framework";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -483,6 +488,8 @@
 		115E2F052476A5C100B3404E /* test.7z */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.7z; sourceTree = "<group>"; };
 		115E2F212476AB1000B3404E /* RxRealm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxRealm.framework; path = iOS/RxRealm.framework; sourceTree = "<group>"; };
 		115E2F232476B62000B3404E /* RxRelay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxRelay.framework; path = iOS/RxRelay.framework; sourceTree = "<group>"; };
+		11ADB3232471AE22001C7B27 /* RxDirectoryWatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxDirectoryWatcher.swift; sourceTree = "<group>"; };
+		11ADB3262471AE3C001C7B27 /* LegacyExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyExtractor.swift; sourceTree = "<group>"; };
 		B3067F4A2106B5A20091437F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B3067F732106B9130091437F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		B3067F752106B9180091437F /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
@@ -536,7 +543,6 @@
 		B3579D2F2106B4D700DDEBD6 /* PVRecentGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PVRecentGame.swift; sourceTree = "<group>"; };
 		B3579D302106B4D700DDEBD6 /* PVFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PVFile.swift; sourceTree = "<group>"; };
 		B3579D312106B4D700DDEBD6 /* PVCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PVCore.swift; sourceTree = "<group>"; };
-		B3579D332106B4D700DDEBD6 /* DirectoryWatcher2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectoryWatcher2.swift; sourceTree = "<group>"; };
 		B3579D342106B4D700DDEBD6 /* GameImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameImporter.swift; sourceTree = "<group>"; };
 		B3579D362106B4D700DDEBD6 /* NSData+Hashing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSData+Hashing.h"; sourceTree = "<group>"; };
 		B3579D372106B4D700DDEBD6 /* NSData+Hashing.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSData+Hashing.m"; sourceTree = "<group>"; };
@@ -948,6 +954,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B3C04B662107867200E7AF79 /* PVLibrary.framework in Frameworks */,
+				11D2762224770953003D2245 /* RxTest.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1200,7 +1207,8 @@
 			children = (
 				B3CDEECA21D4CF61000C55F7 /* DirectoryWatcher.swift */,
 				110BB66224768F1800326AE7 /* DirectoryWatcherTests.swift */,
-				B3579D332106B4D700DDEBD6 /* DirectoryWatcher2.swift */,
+				11ADB3232471AE22001C7B27 /* RxDirectoryWatcher.swift */,
+				11ADB3262471AE3C001C7B27 /* LegacyExtractor.swift */,
 				B378226D21D409F20077E86F /* Extractor.swift */,
 				B3579D342106B4D700DDEBD6 /* GameImporter.swift */,
 				B3CDEEAF21D493AC000C55F7 /* GameImporter2.swift */,
@@ -2027,6 +2035,7 @@
 				B354E7A8219A78420041F971 /* Repository.swift in Sources */,
 				B3274E802106BDD300857F52 /* GameImporter.swift in Sources */,
 				B3C04B982107991200E7AF79 /* PVEmulatorConfiguration+Frameworks.swift in Sources */,
+				11ADB3242471AE22001C7B27 /* RxDirectoryWatcher.swift in Sources */,
 				B3AF47D321071FC0002211EE /* StringToInt.cpp in Sources */,
 				B354E794219A76C80041F971 /* Core.swift in Sources */,
 				B354E796219A76C80041F971 /* SaveState.swift in Sources */,
@@ -2050,6 +2059,7 @@
 				B3AF47BB21071F76002211EE /* CodecExports.cpp in Sources */,
 				B378228521D41E9B0077E86F /* LibrarySerializerError.swift in Sources */,
 				B3AF476521071E28002211EE /* LzmaSDKObjCItem.mm in Sources */,
+				11ADB3272471AE3C001C7B27 /* LegacyExtractor.swift in Sources */,
 				B3AF477521071E85002211EE /* AesOpt.c in Sources */,
 				B3AF477321071E85002211EE /* 7zStream.c in Sources */,
 				B3AF47C221071F76002211EE /* LzmaEncoder.cpp in Sources */,
@@ -2207,6 +2217,7 @@
 				B354E7A9219A78420041F971 /* Repository.swift in Sources */,
 				B3C04AE921077B3100E7AF79 /* GameImporter.swift in Sources */,
 				B3C04B992107991200E7AF79 /* PVEmulatorConfiguration+Frameworks.swift in Sources */,
+				11ADB3252471AE22001C7B27 /* RxDirectoryWatcher.swift in Sources */,
 				B3C04AEA21077B3100E7AF79 /* StringToInt.cpp in Sources */,
 				B354E795219A76C80041F971 /* Core.swift in Sources */,
 				B354E797219A76C80041F971 /* SaveState.swift in Sources */,
@@ -2230,6 +2241,7 @@
 				B3C04AF821077B3100E7AF79 /* CodecExports.cpp in Sources */,
 				B378228621D41E9B0077E86F /* LibrarySerializerError.swift in Sources */,
 				B3C04AF921077B3100E7AF79 /* LzmaSDKObjCItem.mm in Sources */,
+				11ADB3282471AE3C001C7B27 /* LegacyExtractor.swift in Sources */,
 				B3C04AFA21077B3100E7AF79 /* AesOpt.c in Sources */,
 				B3C04AFB21077B3100E7AF79 /* 7zStream.c in Sources */,
 				B3C04AFC21077B3100E7AF79 /* LzmaEncoder.cpp in Sources */,
