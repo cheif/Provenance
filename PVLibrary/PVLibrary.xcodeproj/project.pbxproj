@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		110BB66324768F1800326AE7 /* DirectoryWatcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110BB66224768F1800326AE7 /* DirectoryWatcherTests.swift */; };
+		110BB6662476929300326AE7 /* test.zip in Resources */ = {isa = PBXBuildFile; fileRef = 110BB6652476929300326AE7 /* test.zip */; };
+		115E2F062476A5C100B3404E /* test.7z in Resources */ = {isa = PBXBuildFile; fileRef = 115E2F052476A5C100B3404E /* test.7z */; };
 		115E2F092476A7FB00B3404E /* CocoaLumberjack.framework in Copy Framework */ = {isa = PBXBuildFile; fileRef = B3AF700421916979000FA7F9 /* CocoaLumberjack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		115E2F0A2476A7FB00B3404E /* CocoaLumberjackSwift.framework in Copy Framework */ = {isa = PBXBuildFile; fileRef = B3AF700121916978000FA7F9 /* CocoaLumberjackSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		115E2F0B2476A7FB00B3404E /* NSLogger.framework in Copy Framework */ = {isa = PBXBuildFile; fileRef = B3AF6FFB21916978000FA7F9 /* NSLogger.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -475,6 +478,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		110BB66224768F1800326AE7 /* DirectoryWatcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectoryWatcherTests.swift; sourceTree = "<group>"; };
+		110BB6652476929300326AE7 /* test.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = test.zip; sourceTree = "<group>"; };
+		115E2F052476A5C100B3404E /* test.7z */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.7z; sourceTree = "<group>"; };
 		115E2F212476AB1000B3404E /* RxRealm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxRealm.framework; path = iOS/RxRealm.framework; sourceTree = "<group>"; };
 		115E2F232476B62000B3404E /* RxRelay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxRelay.framework; path = iOS/RxRelay.framework; sourceTree = "<group>"; };
 		B3067F4A2106B5A20091437F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -948,6 +954,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		110BB6642476927B00326AE7 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				115E2F052476A5C100B3404E /* test.7z */,
+				110BB6652476929300326AE7 /* test.zip */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		B3067F492106B5A20091437F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -1184,6 +1199,7 @@
 			isa = PBXGroup;
 			children = (
 				B3CDEECA21D4CF61000C55F7 /* DirectoryWatcher.swift */,
+				110BB66224768F1800326AE7 /* DirectoryWatcherTests.swift */,
 				B3579D332106B4D700DDEBD6 /* DirectoryWatcher2.swift */,
 				B378226D21D409F20077E86F /* Extractor.swift */,
 				B3579D342106B4D700DDEBD6 /* GameImporter.swift */,
@@ -1734,6 +1750,7 @@
 		B3C04B622107867200E7AF79 /* PVLibraryTests */ = {
 			isa = PBXGroup;
 			children = (
+				110BB6642476927B00326AE7 /* Supporting Files */,
 				B3C04B632107867200E7AF79 /* PVLibraryTests.swift */,
 				B3C04B652107867200E7AF79 /* Info.plist */,
 			);
@@ -1910,6 +1927,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				115E2F062476A5C100B3404E /* test.7z in Resources */,
+				110BB6662476929300326AE7 /* test.zip in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1935,7 +1954,6 @@
 				B3274E682106BAF600857F52 /* UIImage+Scaling.m in Sources */,
 				B3AF47AE21071F43002211EE /* OutBuffer.cpp in Sources */,
 				B3AF476C21071E2D002211EE /* LzmaSDKObjCFileDecoder.cpp in Sources */,
-				B3AF42F42107145C002211EE /* DirectoryWatcher2.swift in Sources */,
 				B354E7CF219A8EAF0041F971 /* LibrarySerializer.swift in Sources */,
 				B3AF47C021071F76002211EE /* Lzma2Register.cpp in Sources */,
 				B3067F642106B8650091437F /* NSData+Hashing.m in Sources */,
@@ -2116,7 +2134,6 @@
 				B3C04AA721077B3100E7AF79 /* UIImage+Scaling.m in Sources */,
 				B3C04AA821077B3100E7AF79 /* OutBuffer.cpp in Sources */,
 				B3C04AA921077B3100E7AF79 /* LzmaSDKObjCFileDecoder.cpp in Sources */,
-				B3C04AAA21077B3100E7AF79 /* DirectoryWatcher2.swift in Sources */,
 				B354E7D0219A8EAF0041F971 /* LibrarySerializer.swift in Sources */,
 				B3C04AAB21077B3100E7AF79 /* Lzma2Register.cpp in Sources */,
 				B3C04AAC21077B3100E7AF79 /* NSData+Hashing.m in Sources */,
@@ -2282,6 +2299,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				110BB66324768F1800326AE7 /* DirectoryWatcherTests.swift in Sources */,
 				B3C04B642107867200E7AF79 /* PVLibraryTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -18,12 +18,19 @@ public extension NSNotification.Name {
     static let PVArchiveInflationFailed = NSNotification.Name(rawValue: "PVArchiveInflationFailedNotification")
 }
 
+public protocol ReleaseIdChecker {
+    func releaseID(forCRCs crcs: Set<String>) -> Int?
+}
+
+extension GameImporter: ReleaseIdChecker {}
+
 public final class DirectoryWatcher: NSObject {
     private let watchedDirectory: URL
 
     private let extractionStartedHandler: PVExtractionStartedHandler?
     private let extractionUpdatedHandler: PVExtractionUpdatedHandler?
     private let extractionCompleteHandler: PVExtractionCompleteHandler?
+    private let releaseIdChecker: ReleaseIdChecker
 
     fileprivate var dispatch_source: DispatchSourceFileSystemObject?
     fileprivate let serialQueue: DispatchQueue = DispatchQueue(label: "com.provenance-emu.provenance.serialExtractorQueue")
@@ -32,7 +39,7 @@ public final class DirectoryWatcher: NSObject {
     private var reader: LzmaSDKObjCReader?
     private var unzippedFiles = [URL]()
 
-    public init(directory: URL, extractionStartedHandler startedHandler: PVExtractionStartedHandler?, extractionUpdatedHandler updatedHandler: PVExtractionUpdatedHandler?, extractionCompleteHandler completeHandler: PVExtractionCompleteHandler?) {
+    public init(directory: URL, extractionStartedHandler startedHandler: PVExtractionStartedHandler?, extractionUpdatedHandler updatedHandler: PVExtractionUpdatedHandler?, extractionCompleteHandler completeHandler: PVExtractionCompleteHandler?, releaseIdChecker: ReleaseIdChecker = GameImporter.shared) {
         watchedDirectory = directory
 
         var isDirectory: ObjCBool = false
@@ -50,6 +57,7 @@ public final class DirectoryWatcher: NSObject {
         extractionStartedHandler = startedHandler
         extractionUpdatedHandler = updatedHandler
         extractionCompleteHandler = completeHandler
+        self.releaseIdChecker = releaseIdChecker
 
         super.init()
 
@@ -290,7 +298,7 @@ public final class DirectoryWatcher: NSObject {
 
             // TODO: Support natively using 7zips by matching crcs
             let crcs = Set(items.filter({ $0.crc32 != 0 }).map { String($0.crc32, radix: 16, uppercase: true) })
-            if let releaseID = GameImporter.shared.releaseID(forCRCs: crcs) {
+            if let releaseID = releaseIdChecker.releaseID(forCRCs: crcs) {
                 ILOG("Found a release ID \(releaseID) inside this 7Zip")
             }
 
