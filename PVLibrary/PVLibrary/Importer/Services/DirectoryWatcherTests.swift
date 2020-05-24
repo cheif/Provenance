@@ -133,6 +133,38 @@ class DirectoryWatcherTests: XCTestCase {
         let files = try! FileManager.default.contentsOfDirectory(at: folderPath, includingPropertiesForKeys: nil, options: []).map { $0.lastPathComponent }
         XCTAssertEqual(files, ["Provenance-Bridging-Header.h", "archive.zip"])
     }
+
+    func testStreamingwrite() {
+        let archivePath = folderPath.appendingPathComponent("archive.zip")
+        try! Data().write(to: archivePath)
+        let handle = try! FileHandle(forWritingTo: archivePath)
+
+        let chunks = (0...testZip.count/100).map { $0 * 100 }.map { offset in testZip.subdata(in: (offset..<min(testZip.endIndex, offset + 100))) }
+
+        // Simulate writing 100bytes every other second
+        scheduler
+            .createColdObservable(
+                chunks.enumerated().map { index, data in .next(200+index*2, data) }
+        )
+            .do(onNext: { data in
+                handle.write(data)
+            })
+            .subscribe()
+            .disposed(by: bag)
+
+        let events = scheduler.start { self.sut.events }
+
+        XCTAssertEqual(events.events, [
+            .next(230, .extractionStarted(path: archivePath)),
+            .next(230, .extractionUpdated(path: archivePath, progress: 0)),
+            .next(230, .extractionUpdated(path: archivePath, progress: 0.5)),
+            .next(230, .extractionComplete(path: archivePath))
+        ])
+
+        let files = try! FileManager.default.contentsOfDirectory(at: folderPath, includingPropertiesForKeys: nil, options: []).map { $0.lastPathComponent }
+        XCTAssertEqual(files, ["azure-pipelines.yml", "appcenter-post-clone.sh"])
+
+    }
 }
 
 private struct ReleaseIdCheckerMock: ReleaseIdChecker {
