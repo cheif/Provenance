@@ -15,7 +15,7 @@ class DirectoryWatcherTests: XCTestCase {
     static let folderPath = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(UUID().uuidString)
     var bag: DisposeBag!
     var scheduler: TestScheduler!
-    var sut: RxDirectoryWatcher!
+    var sut: DirectoryWatcher!
     private let releaseIdChecker = ReleaseIdCheckerMock()
     let folderPath = DirectoryWatcherTests.folderPath
     let testZip = try! Data(contentsOf: Bundle(for: DirectoryWatcherTests.self).url(forResource: "test", withExtension: "zip")!)

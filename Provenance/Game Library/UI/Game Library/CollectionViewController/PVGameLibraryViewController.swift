@@ -61,8 +61,7 @@ public extension Notification.Name {
 final class PVGameLibraryViewController: UIViewController, UITextFieldDelegate, UINavigationControllerDelegate, GameLaunchingViewController, GameSharingViewController, WebServerActivatorController {
     lazy var collectionViewZoom: CGFloat = CGFloat(PVSettingsModel.shared.gameLibraryScale)
 
-    let disposeBag = DisposeBag()
-    var watcher: DirectoryWatcher?
+    var disposeBag = DisposeBag()
     var gameImporter: GameImporter!
     var filePathsToImport = [URL]()
 
@@ -223,7 +222,6 @@ final class PVGameLibraryViewController: UIViewController, UITextFieldDelegate, 
         NotificationCenter.default.addObserver(self, selector: #selector(PVGameLibraryViewController.databaseMigrationFinished(_:)), name: NSNotification.Name.DatabaseMigrationFinished, object: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(PVGameLibraryViewController.handleCacheEmptied(_:)), name: NSNotification.Name.PVMediaCacheWasEmptied, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(PVGameLibraryViewController.handleArchiveInflationFailed(_:)), name: NSNotification.Name.PVArchiveInflationFailed, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(PVGameLibraryViewController.handleRefreshLibrary(_:)), name: NSNotification.Name.PVRefreshLibrary, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(PVGameLibraryViewController.handleTextFieldDidChange(_:)), name: UITextField.textDidChangeNotification, object: searchField)
         NotificationCenter.default.addObserver(self, selector: #selector(PVGameLibraryViewController.handleAppDidBecomeActive(_:)), name: UIApplication.didBecomeActiveNotification, object: nil)
@@ -1003,8 +1001,7 @@ final class PVGameLibraryViewController: UIViewController, UITextFieldDelegate, 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         unregisterForChange()
-        watcher?.stopMonitoring()
-        watcherQueue.isSuspended = false
+        disposeBag = .init()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -1026,9 +1023,7 @@ final class PVGameLibraryViewController: UIViewController, UITextFieldDelegate, 
         if isViewLoaded {
             updateConflictsButton()
         }
-
-        watcher?.startMonitoring()
-        watcherQueue.isSuspended = false
+        setupDirectoryWatcher()
 
         // Warn non core dev users if they're running in debug mode
         #if DEBUG && !targetEnvironment(simulator)
@@ -1354,14 +1349,6 @@ final class PVGameLibraryViewController: UIViewController, UITextFieldDelegate, 
         setupDirectoryWatcher()
     }
 
-    lazy var watcherQueue: OperationQueue = {
-        let q = OperationQueue()
-        q.name = "WatcherQueue"
-        q.qualityOfService = .background
-        q.maxConcurrentOperationCount = 1
-        return q
-    }()
-
     func setupDirectoryWatcher() {
         let labelMaker: (URL) -> String = { path in
             #if os(tvOS)
@@ -1371,8 +1358,11 @@ final class PVGameLibraryViewController: UIViewController, UITextFieldDelegate, 
             #endif
         }
 
-        watcher = DirectoryWatcher(directory: PVEmulatorConfiguration.Paths.romsImportPath, extractionStartedHandler: { (_ path: URL) -> Void in
-            DispatchQueue.main.async {
+        let events = DirectoryWatcher(directory: PVEmulatorConfiguration.Paths.romsImportPath).events.share()
+
+        events
+            .observeOn(MainScheduler.asyncInstance)
+            .subscribe(onNext: { event in
                 guard let hud = MBProgressHUD(for: self.view) ?? MBProgressHUD.showAdded(to: self.view, animated: true) else {
                     WLOG("No hud")
                     return
@@ -1381,53 +1371,35 @@ final class PVGameLibraryViewController: UIViewController, UITextFieldDelegate, 
                 hud.show(true)
                 hud.isUserInteractionEnabled = false
                 hud.mode = .annularDeterminate
-                hud.progress = 0
-                hud.labelText = labelMaker(path)
-            }
-        }, extractionUpdatedHandler: { (_ path: URL, _: Int, _: Int, _ progress: Float) -> Void in
 
-            DispatchQueue.main.async {
-                guard let hud = MBProgressHUD(for: self.view) ?? MBProgressHUD.showAdded(to: self.view, animated: false) else {
-                    WLOG("No hud")
-                    return
-                }
-                hud.isUserInteractionEnabled = false
-                hud.mode = .annularDeterminate
-                hud.progress = progress
-                hud.labelText = labelMaker(path)
-            }
-        }, extractionCompleteHandler: { (_ paths: [URL]?) -> Void in
-            DispatchQueue.main.async {
-                if let hud = MBProgressHUD(for: self.view) ?? MBProgressHUD.showAdded(to: self.view, animated: false) {
-                    hud.isUserInteractionEnabled = false
-                    hud.mode = .annularDeterminate
-                    hud.progress = 1
-                    hud.labelText = paths != nil ? "Extraction Complete!" : "Extraction Failed."
+                switch event {
+                case .extractionStarted(let path):
+                    hud.progress = 0
+                    hud.labelText = labelMaker(path)
+                case .extractionUpdated(let path, let progress):
+                    hud.progress = progress
+                    hud.labelText = labelMaker(path)
+                case .extractionComplete:
+                    hud.labelText = "Extraction Complete!"
                     hud.hide(true, afterDelay: 0.5)
-                } else {
-                    WLOG("No hud")
+                case .extractionFailed:
+                    hud.labelText = "Extraction Failed."
+                    hud.hide(true, afterDelay: 0.5)
                 }
-            }
+            })
+            .disposed(by: disposeBag)
 
-            if let paths = paths {
-                self.watcherQueue.addOperation({
-                    self.filePathsToImport.append(contentsOf: paths)
-                    do {
-                        let contents = try FileManager.default.contentsOfDirectory(at: PVEmulatorConfiguration.Paths.romsImportPath, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles])
-                        let archives = contents.filter {
-                            let exts = PVEmulatorConfiguration.archiveExtensions
-                            let ext = $0.pathExtension.lowercased()
-                            return exts.contains(ext)
-                        }
-                        if archives.isEmpty {
-                            self.gameImporter?.startImport(forPaths: self.filePathsToImport)
-                        }
-                    } catch {
-                        ELOG("\(error.localizedDescription)")
-                    }
-                })
-            }
-        })
+        events
+            .compactMap({ event -> [URL]? in
+                if case .extractionComplete(_, let roms) = event {
+                    return roms
+                }
+                return nil
+            })
+            .subscribe(onNext: { paths in
+                self.gameImporter.startImport(forPaths: paths)
+            })
+            .disposed(by: disposeBag)
     }
 
     func setupGameImporter() {
@@ -1621,12 +1593,6 @@ final class PVGameLibraryViewController: UIViewController, UITextFieldDelegate, 
                 RomDatabase.sharedInstance.refresh()
             })
         })
-    }
-
-    @objc func handleArchiveInflationFailed(_: Notification) {
-        let alert = UIAlertController(title: "Failed to extract archive", message: "There was a problem extracting the archive. Perhaps the download was corrupt? Try downloading it again.", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        present(alert, animated: true) { () -> Void in }
     }
 
     @objc func handleRefreshLibrary(_: Notification) {

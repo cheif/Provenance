@@ -12,10 +12,15 @@ import RxSwift
 import RxCocoa
 import ZipArchive
 
+public protocol ReleaseIdChecker {
+    func releaseID(forCRCs crcs: Set<String>) -> Int?
+}
 
-struct LegacyExtractor {
+extension GameImporter: ReleaseIdChecker {}
+
+public struct LegacyExtractor {
     private let releaseIdChecker: ReleaseIdChecker
-    init(releaseIdChecker: ReleaseIdChecker = GameImporter.shared) {
+    public init(releaseIdChecker: ReleaseIdChecker = GameImporter.shared) {
         self.releaseIdChecker = releaseIdChecker
     }
 
