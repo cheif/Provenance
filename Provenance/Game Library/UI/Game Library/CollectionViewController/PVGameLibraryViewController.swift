@@ -1362,6 +1362,12 @@ final class PVGameLibraryViewController: UIViewController, UITextFieldDelegate, 
 
         events
             .observeOn(MainScheduler.asyncInstance)
+            .compactMap({ event -> DirectoryWatcher.ExtractionEvent? in
+                if case .extraction(let extraction) = event {
+                    return extraction
+                }
+                return nil
+            })
             .subscribe(onNext: { event in
                 guard let hud = MBProgressHUD(for: self.view) ?? MBProgressHUD.showAdded(to: self.view, animated: true) else {
                     WLOG("No hud")
@@ -1373,16 +1379,16 @@ final class PVGameLibraryViewController: UIViewController, UITextFieldDelegate, 
                 hud.mode = .annularDeterminate
 
                 switch event {
-                case .extractionStarted(let path):
+                case .started(let path):
                     hud.progress = 0
                     hud.labelText = labelMaker(path)
-                case .extractionUpdated(let path, let progress):
+                case .updated(let path, let progress):
                     hud.progress = progress
                     hud.labelText = labelMaker(path)
-                case .extractionComplete:
+                case .complete:
                     hud.labelText = "Extraction Complete!"
                     hud.hide(true, afterDelay: 0.5)
-                case .extractionFailed:
+                case .failed:
                     hud.labelText = "Extraction Failed."
                     hud.hide(true, afterDelay: 0.5)
                 }
@@ -1391,10 +1397,12 @@ final class PVGameLibraryViewController: UIViewController, UITextFieldDelegate, 
 
         events
             .compactMap({ event -> [URL]? in
-                if case .extractionComplete(_, let roms) = event {
+                switch event {
+                case .extraction(.complete(_, let roms)), .filesDetected(let roms):
                     return roms
+                case .extraction(_):
+                    return nil
                 }
-                return nil
             })
             .subscribe(onNext: { paths in
                 self.gameImporter.startImport(forPaths: paths)
@@ -1434,23 +1442,10 @@ final class PVGameLibraryViewController: UIViewController, UITextFieldDelegate, 
 
         // Wait for the importer to finish setting up it's data from Realm
         gameImporter.initialized.notify(queue: DispatchQueue.global(qos: .background)) {
-            self.initialROMScan()
+            self.importerScanSystemsDirs()
         }
 
         updateConflictsButton()
-    }
-
-    private func initialROMScan() {
-        do {
-            let existingFiles = try FileManager.default.contentsOfDirectory(at: PVEmulatorConfiguration.Paths.romsImportPath, includingPropertiesForKeys: nil, options: [.skipsPackageDescendants, .skipsSubdirectoryDescendants])
-            if !existingFiles.isEmpty {
-                gameImporter.startImport(forPaths: existingFiles)
-            }
-        } catch {
-            ELOG("No existing ROM path at \(PVEmulatorConfiguration.Paths.romsImportPath.path)")
-        }
-
-        importerScanSystemsDirs()
     }
 
     private func importerScanSystemsDirs() {
@@ -1614,7 +1609,9 @@ final class PVGameLibraryViewController: UIViewController, UITextFieldDelegate, 
             self.collectionView?.reloadData()
         }
 
-        initialROMScan()
+        importerScanSystemsDirs()
+        disposeBag = .init()
+        setupDirectoryWatcher()
 //        setUpGameLibrary()
         //    dispatch_async([self.gameImporter serialImportQueue], ^{
         //        [self.gameImporter getRomInfoForFilesAtPaths:romPaths userChosenSystem:nil];

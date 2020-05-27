@@ -11,35 +11,47 @@ import PVSupport
 import RxSwift
 
 public final class DirectoryWatcher {
+    public enum ExtractionEvent: Equatable {
+        case started(path: URL)
+        case updated(path: URL, progress: Float)
+        case complete(path: URL, files: [URL])
+        case failed(path: URL)
+
+    }
     public enum Event: Equatable {
-        case extractionStarted(path: URL)
-        case extractionUpdated(path: URL, progress: Float)
-        case extractionComplete(path: URL, files: [URL])
-        case extractionFailed(path: URL)
+        case extraction(ExtractionEvent)
+        case filesDetected(files: [URL])
     }
 
     public let events: Observable<Event>
 
     public init(directory: URL, extractor: LegacyExtractor = .init(), scheduler: SchedulerType = MainScheduler.asyncInstance) {
         let fileManager = FileManager.default
-        let updatedFiles = fileManager.rx.watchDirectory(at: directory, scheduler: scheduler)
-            .map { addedFiles in addedFiles.map { file in fileManager.rx.watchFile(at: file, scheduler: scheduler).asObservable() }}
-            .flatMap(Observable.merge)
+        let filesInDirectory = fileManager.rx.watchDirectory(at: directory, scheduler: scheduler)
 
-        events = updatedFiles
+        let rawRomsEvents: Observable<Event> = filesInDirectory
+            .map { files in files.filter { !PVEmulatorConfiguration.archiveExtensions.contains($0.pathExtension) }}
+            .map { .filesDetected(files: $0) }
+
+        let extractionEvents: Observable<Event> = filesInDirectory
+            .map { files in files.filter { PVEmulatorConfiguration.archiveExtensions.contains($0.pathExtension) }}
+            .map { addedArchives in addedArchives.map { file in fileManager.rx.watchFile(at: file, scheduler: scheduler).asObservable() }}
+            .flatMap(Observable.merge)
             .flatMap({ url in extractor.extractArchive(at: url, to: directory)
                 .map({ event in
                     switch event {
                     case .started(let path):
-                        return .extractionStarted(path: path)
+                        return .extraction(.started(path: path))
                     case .update(let path, _, _, let progress):
-                        return .extractionUpdated(path: path, progress: progress)
+                        return .extraction(.updated(path: path, progress: progress))
                     case .finished(let path, let files):
-                        return .extractionComplete(path: path, files: files)
+                        return .extraction(.complete(path: path, files: files))
                     }
                 })
-                .catchErrorJustReturn(.extractionFailed(path: url))
+                .catchErrorJustReturn(.extraction(.failed(path: url)))
             })
+
+        events = Observable.merge(rawRomsEvents, extractionEvents)
     }
 }
 
