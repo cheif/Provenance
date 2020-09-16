@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0592894F1DC194FD0012644D /* RealTimeThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 0592894E1DC194FD0012644D /* RealTimeThread.m */; };
+		11946B37251130660003B87B /* PVController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11946B36251130660003B87B /* PVController.swift */; };
+		11946B38251130660003B87B /* PVController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11946B36251130660003B87B /* PVController.swift */; };
 		B302F8A020B73D6500C5E502 /* PVCocoaLumberJackLogging.h in Headers */ = {isa = PBXBuildFile; fileRef = B302F89820B73D5F00C5E502 /* PVCocoaLumberJackLogging.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B302F8A120B73D6500C5E502 /* PVCocoaLumberJackLogging.h in Headers */ = {isa = PBXBuildFile; fileRef = B302F89820B73D5F00C5E502 /* PVCocoaLumberJackLogging.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B302F8A320B73D6500C5E502 /* PVLogEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = B302F89920B73D5F00C5E502 /* PVLogEntry.m */; };
@@ -175,6 +177,7 @@
 /* Begin PBXFileReference section */
 		0592894D1DC194FD0012644D /* RealTimeThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RealTimeThread.h; sourceTree = "<group>"; };
 		0592894E1DC194FD0012644D /* RealTimeThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RealTimeThread.m; sourceTree = "<group>"; };
+		11946B36251130660003B87B /* PVController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PVController.swift; sourceTree = "<group>"; };
 		1A4E718C1A6C699F005CA80F /* DebugUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DebugUtils.h; sourceTree = "<group>"; };
 		1ACEA64B17F7467D0031B1C9 /* PVSupport-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PVSupport-Prefix.pch"; sourceTree = "<group>"; };
 		1ACEA69117F748F80031B1C9 /* OEGameAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEGameAudio.h; sourceTree = "<group>"; };
@@ -499,6 +502,7 @@
 		B3AB36DC2187F4C4009D9244 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				11946B36251130660003B87B /* PVController.swift */,
 				B3AB37462187F57A009D9244 /* iCade */,
 			);
 			path = Controller;
@@ -816,6 +820,7 @@
 				B3AB37BE218812BC009D9244 /* iCadeReaderView.swift in Sources */,
 				B3E6DADF20B7BF8600454DD4 /* UIDeviceExtension.swift in Sources */,
 				B302F8AB20B73D6500C5E502 /* PVProvenanceLogging.m in Sources */,
+				11946B38251130660003B87B /* PVController.swift in Sources */,
 				B302F8AF20B73D6500C5E502 /* PVCocoaLumberJackLogging.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -861,6 +866,7 @@
 				B3F0846C2188CA7A00FF39EE /* CocoaLumberExtensions.swift in Sources */,
 				B3AB37BD218812BB009D9244 /* iCadeReaderView.swift in Sources */,
 				B3AB37E321881A82009D9244 /* PViCadeGamepad.swift in Sources */,
+				11946B37251130660003B87B /* PVController.swift in Sources */,
 				B3447F9B218C1CD200557ACE /* PVSettingsModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

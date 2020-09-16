@@ -12,6 +12,7 @@ import PVSupport
 import QuartzCore
 import RealmSwift
 import UIKit
+import RxSwift
 
 private weak var staticSelf: PVEmulatorViewController?
 
@@ -87,6 +88,7 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
     var secondaryScreen: UIScreen?
     var secondaryWindow: UIWindow?
     var menuGestureRecognizer: UITapGestureRecognizer?
+    let bag = DisposeBag()
 
     var isShowingMenu: Bool = false {
         willSet {
@@ -189,10 +191,15 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
         core.saveStatesPath = saveStatePath.path
         core.batterySavesPath = batterySavesPath.path
         core.biosPath = BIOSPath.path
-        core.controller1 = PVControllerManager.shared.player1
-        core.controller2 = PVControllerManager.shared.player2
-        core.controller3 = PVControllerManager.shared.player3
-        core.controller4 = PVControllerManager.shared.player4
+
+        if let controllerHandler = core as? PVControllerHandler {
+            PVControllerManager.shared.controllerEvents.bind(onNext: controllerHandler.handle).disposed(by: bag)
+        } else {
+            core.controller1 = PVControllerManager.shared.player1
+            core.controller2 = PVControllerManager.shared.player2
+            core.controller3 = PVControllerManager.shared.player3
+            core.controller4 = PVControllerManager.shared.player4
+        }
 
         let md5Hash: String = game.md5Hash
         core.romMD5 = md5Hash

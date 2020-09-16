@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		11946B3A251131050003B87B /* MednafenGameCore+ControllerHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11946B39251131050003B87B /* MednafenGameCore+ControllerHandler.swift */; };
+		11946B3B25113D1E0003B87B /* MednafenGameCore+ControllerHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11946B39251131050003B87B /* MednafenGameCore+ControllerHandler.swift */; };
 		11AFB2BE24880B99000A3922 /* ExtMemStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11AFB2BA24880B98000A3922 /* ExtMemStream.cpp */; };
 		11AFB2BF24880B99000A3922 /* ExtMemStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11AFB2BA24880B98000A3922 /* ExtMemStream.cpp */; };
 		11AFB2C024880B99000A3922 /* VirtualFS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11AFB2BB24880B98000A3922 /* VirtualFS.cpp */; };
@@ -2056,6 +2058,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		11946B39251131050003B87B /* MednafenGameCore+ControllerHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MednafenGameCore+ControllerHandler.swift"; sourceTree = "<group>"; };
 		11AFB2BA24880B98000A3922 /* ExtMemStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExtMemStream.cpp; sourceTree = "<group>"; };
 		11AFB2BB24880B98000A3922 /* VirtualFS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VirtualFS.cpp; sourceTree = "<group>"; };
 		11AFB2BC24880B98000A3922 /* MTStreamReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MTStreamReader.cpp; sourceTree = "<group>"; };
@@ -4364,6 +4367,7 @@
 				824088340FFDDCF400F0FE7D /* MednafenGameCore.h */,
 				824088350FFDDCF400F0FE7D /* MednafenGameCore.mm */,
 				B3A74C8C20522B86001D3D2E /* MednafenGameCore.swift */,
+				11946B39251131050003B87B /* MednafenGameCore+ControllerHandler.swift */,
 				B3CF44B72039B64A005BEB14 /* MednafenMultiDisc.m */,
 				B3CF44BA2039B6D0005BEB14 /* MednafenMultiTap.m */,
 				94454E3B17852E61006C057B /* stubs.mm */,
@@ -10016,6 +10020,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B33355F1207B2A650036A448 /* MednafenGameCore.swift in Sources */,
+				11946B3A251131050003B87B /* MednafenGameCore+ControllerHandler.swift in Sources */,
 				B3AAB43F2073820C0097D86F /* MednafenMultiDisc.m in Sources */,
 				B3AAB425207379230097D86F /* stubs.mm in Sources */,
 				B3AAB4402073820C0097D86F /* MednafenMultiTap.m in Sources */,
@@ -10029,6 +10034,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B33355F4207B3BAD0036A448 /* MednafenMultiDisc.m in Sources */,
+				11946B3B25113D1E0003B87B /* MednafenGameCore+ControllerHandler.swift in Sources */,
 				B33355F8207B3BAD0036A448 /* thread.cpp in Sources */,
 				B33355F7207B3BAD0036A448 /* MednafenGameCore.mm in Sources */,
 				B33355F5207B3BAD0036A448 /* stubs.mm in Sources */,

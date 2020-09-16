@@ -64,4 +64,5 @@ __attribute__((visibility("default")))
 @property (nonatomic, assign) NSUInteger maxDiscs;
 -(void)setMedia:(BOOL)open forDisc:(NSUInteger)disc;
 -(void)changeDisplayMode;
+-(uint32_t*) getInputBuffer:(int)bufferId;
 @end

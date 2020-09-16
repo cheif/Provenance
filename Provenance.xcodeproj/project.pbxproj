@@ -61,6 +61,8 @@
 		1180B3182492A94200636C8A /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1180B3172492A93F00636C8A /* CoreServices.framework */; };
 		1180B31C2492A96700636C8A /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1180B31B2492A95400636C8A /* CoreServices.framework */; };
 		1180B3242492AFC900636C8A /* PVGameLibraryUpdatesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1180B3232492AFC900636C8A /* PVGameLibraryUpdatesController.swift */; };
+		11A233E925128EAB009E72D2 /* PVControllerManager+ControllerHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A233E825128EAB009E72D2 /* PVControllerManager+ControllerHandler.swift */; };
+		11A233EA25128EAD009E72D2 /* PVControllerManager+ControllerHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A233E825128EAB009E72D2 /* PVControllerManager+ControllerHandler.swift */; };
 		11A8A9E72496A3E500C1C6B4 /* PVGameLibraryUpdatesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1180B3232492AFC900636C8A /* PVGameLibraryUpdatesController.swift */; };
 		11ADB31F2471A34E001C7B27 /* PVTVTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ADB31E2471A34E001C7B27 /* PVTVTabBarController.swift */; };
 		11AFB2B72487C120000A3922 /* UISearchController+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11AFB2B62487C120000A3922 /* UISearchController+Rx.swift */; };
@@ -632,6 +634,7 @@
 		1180B3172492A93F00636C8A /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
 		1180B31B2492A95400636C8A /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS13.4.sdk/System/Library/Frameworks/CoreServices.framework; sourceTree = DEVELOPER_DIR; };
 		1180B3232492AFC900636C8A /* PVGameLibraryUpdatesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PVGameLibraryUpdatesController.swift; sourceTree = "<group>"; };
+		11A233E825128EAB009E72D2 /* PVControllerManager+ControllerHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PVControllerManager+ControllerHandler.swift"; sourceTree = "<group>"; };
 		11ADB31E2471A34E001C7B27 /* PVTVTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PVTVTabBarController.swift; sourceTree = "<group>"; };
 		11AFB2B62487C120000A3922 /* UISearchController+Rx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISearchController+Rx.swift"; sourceTree = "<group>"; };
 		14C8EF2121D9443E001B7E37 /* PVTGBDual.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PVTGBDual.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1272,6 +1275,7 @@
 				B3F64ECE205CD1F100C273C7 /* JSButton.swift */,
 				B3F64ED1205CD20800C273C7 /* PVButtonGroupOverlayView.swift */,
 				B3F64ED4205CD21400C273C7 /* PVControllerManager.swift */,
+				11A233E825128EAB009E72D2 /* PVControllerManager+ControllerHandler.swift */,
 				B3F64ED7205CD21F00C273C7 /* PVControllerSelectionViewController.swift */,
 				B3AB37F421881CDC009D9244 /* PViCadeControllerViewController.swift */,
 				B36D9DF7203562E000D583C4 /* PVControllerViewController.swift */,
@@ -2515,6 +2519,7 @@
 				B383F3BF219BBD8700DB6926 /* LogViewable.swift in Sources */,
 				378F4A041B63D7CD0065FA39 /* GCDWebServerResponse.m in Sources */,
 				B35E6C21207ED7050040709A /* AppearanceScope.swift in Sources */,
+				11A233E925128EAB009E72D2 /* PVControllerManager+ControllerHandler.swift in Sources */,
 				B35E6C2B207ED7050040709A /* UITraitCollectionExtensions.swift in Sources */,
 				B3AB37432187F569009D9244 /* PVN64ControllerViewController.swift in Sources */,
 				B3D5E2AE218EC1AE0015C690 /* RealmBindObserver.swift in Sources */,
@@ -2591,6 +2596,7 @@
 				B3B104CD218F2EF400210C39 /* PVPCEControllerViewController.swift in Sources */,
 				B39EE44F2274EEBC0013474F /* UIActionSheet+BlockAdditions.m in Sources */,
 				B3B104C4218F2EF400210C39 /* PVAtariJaguarControllerViewController.swift in Sources */,
+				11A233EA25128EAD009E72D2 /* PVControllerManager+ControllerHandler.swift in Sources */,
 				B3B104C6218F2EF400210C39 /* PVGBAControllerViewController.swift in Sources */,
 				B3F64EC9205CBC6100C273C7 /* PVLicensesViewController.swift in Sources */,
 				1AD481C91BA3530B00FDA50A /* PVAppDelegate.swift in Sources */,
