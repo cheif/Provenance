@@ -65,4 +65,5 @@ __attribute__((visibility("default")))
 -(void)setMedia:(BOOL)open forDisc:(NSUInteger)disc;
 -(void)changeDisplayMode;
 -(uint32_t*) getInputBuffer:(int)bufferId;
+-(void)MDNF_en16lsb:(void *)ptr withValue:(uint16_t)value;
 @end

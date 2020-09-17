@@ -1338,6 +1338,10 @@ static size_t update_audio_batch(const int16_t *data, size_t frames)
     inputBuffer[player][0] &= ~(1 << PSXMap[button]);
 }
 
+- (void)MDNF_en16lsb:(void *)ptr withValue:(uint16_t)value {
+    Mednafen::MDFN_en16lsb(ptr, value);
+}
+
 - (void)didMovePSXJoystickDirection:(PVPSXButton)button withValue:(CGFloat)value forPlayer:(NSInteger)player
 {
     // TODO

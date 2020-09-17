@@ -10,6 +10,7 @@ import Foundation
 
 public enum PVControllerInput {
     case button(Button, isPressed: Bool)
+    case analog(Stick, xValue: Float, yValue: Float)
 
     public enum Button {
         case up
@@ -26,6 +27,11 @@ public enum PVControllerInput {
         case rightShoulder
         case rightTrigger
         case R3
+    }
+
+    public enum Stick {
+        case left
+        case right
     }
 }
 

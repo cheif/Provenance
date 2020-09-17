@@ -56,6 +56,9 @@ private extension GCExtendedGamepad {
             leftTrigger.isPressed.map { .button(.leftTrigger, isPressed: $0) },
             rightShoulder.isPressed.map { .button(.rightShoulder, isPressed: $0) },
             rightTrigger.isPressed.map { .button(.rightTrigger, isPressed: $0) },
+
+            leftThumbstick.analogValue.map { xValue, yValue in .analog(.left, xValue: xValue, yValue: yValue) },
+            rightThumbstick.analogValue.map { xValue, yValue in .analog(.right, xValue: xValue, yValue: yValue) }
         ]
 
         if #available(tvOS 12.1, *) {
@@ -85,6 +88,20 @@ private extension GCControllerButtonInput {
         .create { observer in
             self.valueChangedHandler = { (_, value: Float, _) in
                 observer.onNext(value > 0.5)
+            }
+
+            return Disposables.create {
+                self.valueChangedHandler = nil
+            }
+        }
+    }
+}
+
+private extension GCControllerDirectionPad {
+    var analogValue: Observable<(xValue: Float, yValue: Float)> {
+        .create { observer in
+            self.valueChangedHandler = { _, xValue, yValue in
+                observer.onNext((xValue, yValue))
             }
 
             return Disposables.create {

@@ -24,6 +24,32 @@ extension MednafenGameCore: PVControllerHandler {
             } else {
                 buffer[0] &= ~bitmap
             }
+        case .analog(let stick, let xValue, let yValue):
+            let supportsAnalogMode = mapping.supportsAnalogMode(with: buffer[0])
+            if !supportsAnalogMode && stick == .left {
+                // Analog mode is a PSX-only feature, if it's not enabled, or we're not on PSX, we handle the left stick as a dpad
+                handle(input: .button(.up, isPressed: yValue > 0), for: player)
+                handle(input: .button(.down, isPressed: yValue < 0), for: player)
+                handle(input: .button(.left, isPressed: xValue < 0), for: player)
+                handle(input: .button(.right, isPressed: xValue > 0), for: player)
+            } else if supportsAnalogMode,
+                let (xOffset, yOffset) = mapping.offset(for: stick) {
+                // TODO
+                // Fix the analog circle-to-square axis range conversion by scaling between a value of 1.00 and 1.50
+                // We cannot use MDFNI_SetSetting("psx.input.port1.dualshock.axis_scale", "1.33") directly.
+                // Background: https://mednafen.github.io/documentation/psx.html#Section_analog_range
+                // double scaledValue = MIN(floor(0.5 + value * 1.33), 32767); // 30712 / cos(2*pi/8) / 32767 = 1.33
+
+                // We scale the -1.0 -> 1.0 values to the PSX space, which is 0 -> UInt16.maxValue (65535), where 32767 means the stick is in the center
+                let mappedXValue = UInt16(Int32(32767) + Int32(xValue * 32767))
+                // y-axis is inverted on PSX
+                let mappedYValue = UInt16(Int32(32767) + Int32(-yValue * 32767))
+                buffer.withMemoryRebound(to: UInt8.self, capacity: 8, { u8Pointer in
+                    #warning("FIXME: Warning")
+                    self.mdnf_en16lsb(&u8Pointer[3]+xOffset, withValue: mappedXValue)
+                    self.mdnf_en16lsb(&u8Pointer[3]+yOffset, withValue: mappedYValue)
+                })
+            }
         }
     }
 
@@ -39,11 +65,40 @@ extension MednafenGameCore: PVControllerHandler {
 
 private protocol Mapping {
     static func offset(for button: PVControllerInput.Button) -> Int?
+
+    static func supportsAnalogMode(with inputBuffer: UInt32) -> Bool
+    static func offset(for stick: PVControllerInput.Stick) -> (xAxis: Int, yAxis: Int)?
+}
+
+extension Mapping {
+    static func supportsAnalogMode(with inputBuffer: UInt32) -> Bool {
+        false
+    }
+
+    static func offset(for stick: PVControllerInput.Stick) -> (xAxis: Int, yAxis: Int)? {
+        nil
+    }
 }
 
 struct PSXMapping: Mapping {
+    static var supportsAnalogMode: Bool { true }
     static func offset(for button: PVControllerInput.Button) -> Int? {
         return buttonMap[button]?.rawValue
+    }
+
+    static func supportsAnalogMode(with inputBuffer: UInt32) -> Bool {
+        // Check if analogMode-bit is set
+        (inputBuffer & (1 << 17)) != 0
+    }
+
+    static func offset(for stick: PVControllerInput.Stick) -> (xAxis: Int, yAxis: Int)? {
+        switch stick {
+        case .left:
+            return (xAxis: 4, yAxis: 6)
+        case .right:
+            #warning("FIXME, make sure this works")
+            return (xAxis: 0, yAxis: 2)
+        }
     }
 
     private static let buttonMap: [PVControllerInput.Button: PSXButton] = [
