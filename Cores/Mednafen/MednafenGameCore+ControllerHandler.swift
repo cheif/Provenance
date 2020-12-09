@@ -44,10 +44,10 @@ extension MednafenGameCore: PVControllerHandler {
                 let mappedXValue = UInt16(Int32(32767) + Int32(xValue * 32767))
                 // y-axis is inverted on PSX
                 let mappedYValue = UInt16(Int32(32767) + Int32(-yValue * 32767))
+
                 buffer.withMemoryRebound(to: UInt8.self, capacity: 8, { u8Pointer in
-                    #warning("FIXME: Warning")
-                    self.mdnf_en16lsb(&u8Pointer[3]+xOffset, withValue: mappedXValue)
-                    self.mdnf_en16lsb(&u8Pointer[3]+yOffset, withValue: mappedYValue)
+                    self.mdnf_en16lsb(u8Pointer + xOffset, withValue: mappedXValue)
+                    self.mdnf_en16lsb(u8Pointer + yOffset, withValue: mappedYValue)
                 })
             }
         }
@@ -94,10 +94,9 @@ struct PSXMapping: Mapping {
     static func offset(for stick: PVControllerInput.Stick) -> (xAxis: Int, yAxis: Int)? {
         switch stick {
         case .left:
-            return (xAxis: 4, yAxis: 6)
+            return (xAxis: 7, yAxis: 9)
         case .right:
-            #warning("FIXME, make sure this works")
-            return (xAxis: 0, yAxis: 2)
+            return (xAxis: 3, yAxis: 5)
         }
     }
 
